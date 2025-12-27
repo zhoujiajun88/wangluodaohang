@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>文字转图片 Text2Pic / wangluodaohang</title>
+    <style>
+        :root { --primary: #007AFF; --bg: #f5f5f7; }
+        body { font-family: "PingFang SC", "Hiragino Sans GB", sans-serif; display: flex; height: 100vh; margin: 0; background: var(--bg); }
+        
+        /* 侧边栏样式 */
+        .sidebar { width: 320px; background: #fff; padding: 20px; box-shadow: 2px 0 15px rgba(0,0,0,0.05); overflow-y: auto; z-index: 10; }
+        .control-item { margin-bottom: 24px; }
+        label { display: block; font-size: 13px; font-weight: 600; color: #888; margin-bottom: 10px; text-transform: uppercase; }
+        
+        textarea { width: 100%; height: 100px; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 14px; transition: border 0.3s; }
+        textarea:focus { border-color: var(--primary); outline: none; }
+
+        /* 颜色选择器矩阵 */
+        .color-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin-top: 10px; }
+        .color-swatch { width: 100%; aspect-ratio: 1; border-radius: 4px; cursor: pointer; border: 1px solid rgba(0,0,0,0.1); transition: transform 0.2s; }
+        .color-swatch:hover { transform: scale(1.1); }
+        
+        .custom-color-row { display: flex; align-items: center; gap: 10px; margin-top: 12px; }
+        input[type="color"] { width: 40px; height: 40px; border: none; padding: 0; background: none; cursor: pointer; }
+
+        /* 预览区 */
+        .preview-container { flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px; overflow: auto; background-image: radial-gradient(#d1d1d1 1px, transparent 1px); background-size: 20px 20px; }
+        canvas { box-shadow: 0 20px 50px rgba(0,0,0,0.15); max-width: 100%; }
+
+        .btn-save { width: 100%; padding: 14px; background: #000; color: #fff; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <h2 style="margin-top:0">文字转图片</h2>
+    
+    <div class="control-item">
+        <label>内容</label>
+        <textarea id="textInput">文本到
+图&nbsp;&nbsp;片
+        </textarea>
+    </div>
+
+    <div class="control-item">
+        <label>字体设置</label>
+        <select id="fontFamily" style="width:100%; padding:8px;">
+            <option value="serif, SimSun">宋体</option>
+            <option value="Microsoft YaHei, PingFang SC, SimHei">黑体</option>
+            <option value="cursive, Kaiti SC, Kaiti">楷体风格</option>
+            <option value="monospace">等宽字体</option>
+        </select>
+        <input type="range" id="fontSize" min="20" max="150" value="60" style="width:100%; margin-top:10px;">
+    </div>
+
+    <div class="control-item">
+        <label>预设配色方案</label>
+        <div class="color-grid" id="presetPalettes">
+            <div class="color-swatch" style="background:#000" onclick="setTheme('#ffffff', '#000000')" title="黑金"></div>
+            <div class="color-swatch" style="background:#f5f5f7" onclick="setTheme('#1d1d1f', '#f5f5f7')" title="极简灰"></div>
+            <div class="color-swatch" style="background:#e3f2fd" onclick="setTheme('#1565c0', '#e3f2fd')" title="天空蓝"></div>
+            <div class="color-swatch" style="background:#f1f8e9" onclick="setTheme('#33691e', '#f1f8e9')" title="森林绿"></div>
+            <div class="color-swatch" style="background:#fff3e0" onclick="setTheme('#e65100', '#fff3e0')" title="落日橙"></div>
+            <div class="color-swatch" style="background:#000; border:2px dashed #ccc" onclick="setTheme('#000000', 'transparent')" title="透明背景"></div>
+        </div>
+    </div>
+
+    <div class="control-item">
+        <label>自定义文字颜色</label>
+        <div class="custom-color-row">
+            <input type="color" id="textColor" value="#000000">
+            <code id="textHex">#000000</code>
+        </div>
+    </div>
+
+    <div class="control-item">
+        <label>自定义背景颜色</label>
+        <div class="custom-color-row">
+            <input type="color" id="bgColor" value="#ffffff">
+            <code id="bgHex">#ffffff</code>
+            <label style="display:inline; margin-left:10px;"><input type="checkbox" id="transparentBg"> 透明</label>
+        </div>
+    </div>
+
+    <button class="btn-save" onclick="downloadImg()">导出图片</button>
+</div>
+
+<div class="preview-container">
+    <canvas id="mainCanvas"></canvas>
+</div>
+
+<script>
+    const canvas = document.getElementById('mainCanvas');
+    const ctx = canvas.getContext('2d');
+
+    const elements = ['textInput', 'fontSize', 'textColor', 'bgColor', 'fontFamily', 'transparentBg'];
+
+    function draw() {
+        const text = document.getElementById('textInput').value;
+        const fontSize = parseInt(document.getElementById('fontSize').value);
+        const textColor = document.getElementById('textColor').value;
+        const bgColor = document.getElementById('bgColor').value;
+        const fontFamily = document.getElementById('fontFamily').value;
+        const isTransparent = document.getElementById('transparentBg').checked;
+
+        // 更新数值显示
+        document.getElementById('textHex').innerText = textColor.toUpperCase();
+        document.getElementById('bgHex').innerText = isTransparent ? 'TRANSPARENT' : bgColor.toUpperCase();
+
+        const lines = text.split('\n');
+        ctx.font = `${fontSize}px ${fontFamily}`;
+        
+        // 计算最大宽度
+        let maxWidth = 0;
+        lines.forEach(line => {
+            const m = ctx.measureText(line);
+            if(m.width > maxWidth) maxWidth = m.width;
+        });
+
+        const padding = fontSize * 0.8;
+        const lineHeight = fontSize * 1.5;
+        
+        canvas.width = maxWidth + padding * 2;
+        canvas.height = lines.length * lineHeight + padding;
+
+        // 绘制背景
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        if (!isTransparent) {
+            ctx.fillStyle = bgColor;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        // 绘制文字
+        ctx.fillStyle = textColor;
+        ctx.font = `${fontSize}px ${fontFamily}`;
+        ctx.textBaseline = 'middle';
+
+        lines.forEach((line, i) => {
+            ctx.fillText(line, padding, padding + i * lineHeight + fontSize/2);
+        });
+    }
+
+    function setTheme(text, bg) {
+        document.getElementById('textColor').value = text;
+        if(bg === 'transparent') {
+            document.getElementById('transparentBg').checked = true;
+        } else {
+            document.getElementById('transparentBg').checked = false;
+            document.getElementById('bgColor').value = bg;
+        }
+        draw();
+    }
+
+    elements.forEach(id => {
+        document.getElementById(id).addEventListener('input', draw);
+    });
+
+    function downloadImg() {
+        const link = document.createElement('a');
+        link.download = 'export.png';
+        link.href = canvas.toDataURL();
+        link.click();
+    }
+
+    window.onload = draw;
+</script>
+
+</body>
+</html>
