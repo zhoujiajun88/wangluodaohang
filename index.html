@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>网路集结 NetHub / wangluodaohang</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background: #f4f7f6;
+            margin: 0;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2563eb;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #333;
+            transition: 0.3s;
+            border: 1px solid #eee;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .category-title {
+            grid-column: 1 / -1;
+            margin-top: 20px;
+            color: #666;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+
+        .footer {
+            margin-top: 80px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e7eb;
+            text-align: center;
+        }
+
+        .friends {
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 10px;
+        }
+
+        .friends a {
+            color: #4b5563;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+
+        .friends a:hover {
+            color: #2563eb;
+            text-decoration: underline;
+        }
+
+        .sep {
+            color: #d1d5db;
+        }
+
+        .copyright {
+            font-size: 12px;
+            color: #9ca3af;
+            /* 浅灰色，保持低调 */
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">🌐 NetHub / wangluodaohang</div>
+        </div>
+        <div class="grid">
+            <div class="category-title">常用工具</div>
+            <a href="/tools/text2pic" class="card"><strong>Text2Pic</strong><br><small>文本转图片</small></a>
+            <a href="/tools/colorpicker" class="card"><strong>Color Picker</strong><br><small>颜色选择器</small></a>
+        </div>
+    </div>
+    <footer class="footer">
+        <div class="friends">
+            <a href="https://ixiaozhi.com" target="_blank">ixiaozhi</a> - deprecated
+            <span class="sep">|</span>
+            <a href="https://mail.zhoujiajun.com" target="_blank">mail</a>
+        </div>
+        <div class="copyright">
+            © 2025 - 2026 ixiaozhi.
+        </div>
+    </footer>
+    </style>
+</body>
+
+</html>
