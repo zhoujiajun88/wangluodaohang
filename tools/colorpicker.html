@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>网页颜色选择器 Color Picker / wangluodaohang</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px;
+        }
+
+        h2 { color: #333; margin-bottom: 30px; }
+
+        /* 颜色网格容器 */
+        .color-grid {
+            display: grid;
+            /* 关键：每行固定6个 */
+            grid-template-columns: repeat(6, 1fr);
+            gap: 15px;
+            max-width: 800px;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        /* 单个色块 */
+        .color-card {
+            width: 80px;
+            height: 60px;
+            border-radius: 6px;
+            cursor: pointer;
+            position: relative;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .color-card:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 10;
+        }
+
+        /* 鼠标悬停显示的提示文字 */
+        .color-card::after {
+            content: attr(data-color);
+            position: absolute;
+            bottom: -30px;
+            background: #333;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+            white-space: nowrap;
+        }
+
+        .color-card:hover::after {
+            opacity: 1;
+        }
+
+        /* 复制成功弹窗 */
+        #toast {
+            visibility: hidden;
+            min-width: 200px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 8px;
+            padding: 16px;
+            position: fixed;
+            z-index: 100;
+            bottom: 30px;
+            font-size: 14px;
+        }
+
+        #toast.show {
+            visibility: visible;
+            animation: fadein 0.5s, fadeout 0.5s 2s;
+        }
+
+        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
+        @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+    </style>
+</head>
+<body>
+
+    <h2>网页颜色选择器</h2>
+    <div class="color-grid" id="colorGrid"></div>
+    <div id="toast">复制成功！</div>
+
+    <script>
+        // 自动生成120+常用颜色（包含MD色彩、基础色等）
+        const baseHues = [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330];
+        const lightness = [95, 85, 75, 65, 55, 45, 35];
+        const colors = [];
+
+        // 生成灰度图层 (12个)
+        const grays = ['#000000', '#1A1A1A', '#333333', '#4D4D4D', '#666666', '#808080', '#999999', '#B3B3B3', '#CCCCCC', '#E6E6E6', '#F2F2F2', '#FFFFFF'];
+        
+        // HSL转Hex辅助函数
+        function hslToHex(h, s, l) {
+            l /= 100;
+            const a = s * Math.min(l, 1 - l) / 100;
+            const f = n => {
+                const k = (n + h / 30) % 12;
+                const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+                return Math.round(255 * color).toString(16).padStart(2, '0');
+            };
+            return `#${f(0)}${f(8)}${f(4)}`.toUpperCase();
+        }
+
+        // 构建颜色数组：12色相 * 9亮度/饱和度组合 + 12灰色 = 120色
+        baseHues.forEach(h => {
+            [90, 70, 50].forEach(s => {
+                [80, 60, 40].forEach(l => {
+                    colors.push(hslToHex(h, s, l));
+                });
+            });
+        });
+        // 补足灰色和一些特定流行色
+        const finalColors = [...colors.slice(0, 114), ...grays];
+
+        const grid = document.getElementById('colorGrid');
+        const toast = document.getElementById('toast');
+
+        // 渲染色块
+        finalColors.forEach(color => {
+            const card = document.createElement('div');
+            card.className = 'color-card';
+            card.style.backgroundColor = color;
+            card.setAttribute('data-color', color);
+            
+            card.onclick = () => {
+                navigator.clipboard.writeText(color).then(() => {
+                    toast.innerText = `已复制: ${color}`;
+                    toast.className = "show";
+                    setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 2500);
+                });
+            };
+            
+            grid.appendChild(card);
+        });
+    </script>
+</body>
+</html>

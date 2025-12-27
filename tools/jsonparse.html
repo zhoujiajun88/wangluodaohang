@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>JSON格式化工具 JSON Parse / wangluodaohang</title>
+    <style>
+        :root {
+            --key: #881391;
+            --string: #268bd2;
+            --number: #1c00cf;
+            --outline-bg: #f8f9fa;
+        }
+
+        body {
+            display: flex;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', Monaco, monospace;
+            font-size: 13px;
+            color: #333;
+        }
+
+        .panel {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid #ddd;
+        }
+
+        #left {
+            width: 20%;
+        }
+
+        #center {
+            width: 55%;
+            background:  #f8f8f2;
+            overflow: auto;
+        }
+
+        #right {
+            width: 25%;
+            background: var(--outline-bg);
+            overflow: auto;
+        }
+
+        textarea {
+            flex: 1;
+            border: none;
+            padding: 15px;
+            outline: none;
+            background: #fff;
+            color: #272822;
+            line-height: 1.5;
+            resize: none;
+        }
+
+        h3 {
+            margin: 0;
+            padding: 10px;
+            font-size: 12px;
+            background: #eee;
+            text-transform: uppercase;
+            color: #666;
+        }
+
+        /* 中部渲染样式 */
+        .node {
+            margin-left: 20px;
+            line-height: 1.6;
+            position: relative;
+        }
+
+        .toggle {
+            cursor: pointer;
+            position: absolute;
+            left: -15px;
+            user-select: none;
+            color: #999;
+        }
+
+        .toggle:hover {
+            color: #333;
+        }
+
+        .collapsed>.content {
+            display: none;
+        }
+
+        .collapsed>.toggle::after {
+            content: '▶';
+        }
+
+        .toggle::after {
+            content: '▼';
+        }
+
+        .key {
+            color: var(--key);
+            font-weight: bold;
+        }
+
+        .string {
+            color: var(--string);
+        }
+
+        .number {
+            color: var(--number);
+        }
+
+        .bracket {
+            color: #555;
+            font-weight: bold;
+        }
+
+        /* 右侧大纲样式 */
+        .outline-item {
+            padding: 5px 15px;
+            border-left: 2px solid transparent;
+            color: #555;
+            transition: 0.2s;
+        }
+
+        .outline-item:hover {
+            background: #e9ecef;
+            border-left-color: var(--string);
+            color: #000;
+        }
+
+        .indent {
+            display: inline-block;
+            width: 15px;
+            border-left: 1px dotted #ccc;
+            height: 10px;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="left" class="panel">
+        <h3>Input</h3>
+        <textarea id="jsonInput" placeholder="input JSON..."></textarea>
+    </div>
+
+    <div id="center" class="panel">
+        <h3>Formatted View</h3>
+        <div id="jsonView" style="padding: 15px;"></div>
+    </div>
+
+    <div id="right" class="panel">
+        <h3>Structure Outline</h3>
+        <div id="outlineView"></div>
+    </div>
+
+    <script>
+        const input = document.getElementById('jsonInput');
+        const view = document.getElementById('jsonView');
+        const outline = document.getElementById('outlineView');
+
+        input.addEventListener('input', () => {
+            try {
+                const data = JSON.parse(input.value);
+                view.innerHTML = '';
+                outline.innerHTML = '';
+                renderView(data, view);
+                renderOutline(data, outline);
+            } catch (e) {
+                view.innerHTML = '<span style="color:red">JSON 语法错误</span>';
+            }
+        });
+
+        // --- 中部渲染：隐藏数组索引 ---
+        function renderView(data, container, key = null, isArrayChild = false) {
+            const row = document.createElement('div');
+            row.className = 'node';
+
+            // 如果是数组的直接子元素，不显示 key (0, 1, 2...)
+            if (key !== null && !isArrayChild) {
+                const kSpan = document.createElement('span');
+                kSpan.className = 'key';
+                kSpan.textContent = `"${key}": `;
+                row.appendChild(kSpan);
+            }
+
+            if (data !== null && typeof data === 'object') {
+                const isArr = Array.isArray(data);
+                const t = document.createElement('span');
+                t.className = 'toggle';
+                t.onclick = () => row.classList.toggle('collapsed');
+                row.appendChild(t);
+
+                row.appendChild(document.createTextNode(isArr ? '[' : '{'));
+
+                const content = document.createElement('div');
+                content.className = 'content';
+                for (let k in data) {
+                    renderView(data[k], content, k, isArr); // 传入 isArr 标记
+                }
+                row.appendChild(content);
+                row.appendChild(document.createTextNode(isArr ? ']' : '}'));
+            } else {
+                const vSpan = document.createElement('span');
+                vSpan.className = typeof data;
+                vSpan.textContent = typeof data === 'string' ? `"${data}"` : data;
+                row.appendChild(vSpan);
+            }
+            container.appendChild(row);
+        }
+
+        // --- 右侧渲染：去重逻辑 ---
+        function renderOutline(data, container, depth = 0) {
+            if (data === null || typeof data !== 'object') return;
+
+            const keys = Array.isArray(data) ? [] : Object.keys(data);
+
+            // 如果是数组，我们只对第一个元素进行结构建模，避免后面重复显示
+            if (Array.isArray(data)) {
+                if (data.length > 0) {
+                    renderOutline(data[0], container, depth);
+                }
+            } else {
+                for (let k in data) {
+                    const item = document.createElement('div');
+                    item.className = 'outline-item';
+                    item.style.paddingLeft = `${depth * 15 + 15}px`;
+                    item.innerHTML = `<span>📂 ${k}</span>`;
+                    container.appendChild(item);
+
+                    if (typeof data[k] === 'object') {
+                        renderOutline(data[k], container, depth + 1);
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
