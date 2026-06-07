@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-H698BX2C0M"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-H698BX2C0M');
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>插入空白字符 EmptyChar / wangluodaohang</title>
+    <style>
+        :root {
+            --bg: #f7f8fb;
+            --surface: #ffffff;
+            --text: #111827;
+            --muted: #6b7280;
+            --border: #e5e7eb;
+            --primary: #2563eb;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            color: var(--text);
+            background: var(--bg);
+            font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+        }
+
+        .site-return {
+            position: fixed;
+            top: 14px;
+            left: 14px;
+            z-index: 20;
+            padding: 8px 11px;
+            border: 1px solid rgba(0,0,0,0.08);
+            border-radius: 8px;
+            color: #374151;
+            background: rgba(255,255,255,0.88);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            font-size: 13px;
+            text-decoration: none;
+            backdrop-filter: blur(8px);
+        }
+
+        .site-return:hover {
+            color: var(--primary);
+            background: #fff;
+        }
+
+        .wrap {
+            width: min(920px, calc(100% - 32px));
+            margin: 0 auto;
+            padding: 72px 0 40px;
+        }
+
+        h1 {
+            margin: 0 0 18px;
+            font-size: 28px;
+            line-height: 1.2;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 220px;
+            padding: 16px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            background: var(--surface);
+            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.04);
+            font: inherit;
+            line-height: 1.7;
+            resize: vertical;
+        }
+
+        textarea:focus {
+            border-color: #93c5fd;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin: 14px 0 24px;
+        }
+
+        button {
+            min-height: 38px;
+            padding: 0 15px;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            font: inherit;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            color: #fff;
+            background: var(--primary);
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+        }
+
+        .btn-ghost {
+            color: #374151;
+            background: #fff;
+            border-color: var(--border);
+        }
+
+        .btn-ghost:hover {
+            border-color: #cbd5e1;
+        }
+
+        .results {
+            display: grid;
+            gap: 12px;
+        }
+
+        .result {
+            padding: 14px 16px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--surface);
+        }
+
+        .result-text {
+            margin: 0 0 10px;
+            line-height: 1.8;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .result-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .copy-link {
+            color: var(--primary);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .copy-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <a class="site-return" href="../index.html">← 拾用</a>
+
+    <main class="wrap">
+        <h1>empty</h1>
+        <textarea id="sourceText" placeholder="输入原始文本"></textarea>
+
+        <div class="actions">
+            <button class="btn-primary" id="generateBtn" type="button">生成新文本</button>
+            <button class="btn-ghost" id="clearBtn" type="button">清空</button>
+        </div>
+
+        <section class="results" id="results" aria-live="polite"></section>
+    </main>
+
+    <script>
+        const sourceText = document.getElementById('sourceText');
+        const results = document.getElementById('results');
+        const generateBtn = document.getElementById('generateBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const blankChars = ['\u200b', '\u200c', '\u200d', '\u200e', '\u2060', '\ufeff'];
+
+        function randomBlank() {
+            return blankChars[Math.floor(Math.random() * blankChars.length)];
+        }
+
+        function randomBlankGroup() {
+            const length = Math.floor(Math.random() * 5) + 1;
+            return Array.from({ length }, randomBlank).join('');
+        }
+
+        function transformText(text) {
+            const chars = Array.from(text);
+            if (chars.length < 2) return text;
+
+            return chars.map((char, index) => {
+                if (index === chars.length - 1 || /\s/.test(char)) return char;
+                return Math.random() < 0.45 ? char + randomBlankGroup() : char;
+            }).join('');
+        }
+
+        function markCopied(link) {
+            const oldText = link.textContent;
+            link.textContent = '已复制';
+            setTimeout(() => {
+                link.textContent = oldText;
+            }, 1000);
+        }
+
+        function fallbackCopy(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.setAttribute('readonly', '');
+            textarea.style.position = 'fixed';
+            textarea.style.left = '-9999px';
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            textarea.remove();
+        }
+
+        function copyText(text, link) {
+            if (!navigator.clipboard) {
+                fallbackCopy(text);
+                markCopied(link);
+                return;
+            }
+
+            navigator.clipboard.writeText(text).then(() => {
+                markCopied(link);
+            }).catch(() => {
+                fallbackCopy(text);
+                markCopied(link);
+            });
+        }
+
+        function addResult(original, processed) {
+            const item = document.createElement('article');
+            item.className = 'result';
+
+            const text = document.createElement('p');
+            text.className = 'result-text';
+            text.textContent = processed;
+
+            const meta = document.createElement('div');
+            meta.className = 'result-meta';
+
+            const copy = document.createElement('a');
+            copy.className = 'copy-link';
+            copy.href = '#';
+            copy.textContent = '点击复制';
+            copy.addEventListener('click', event => {
+                event.preventDefault();
+                copyText(processed, copy);
+            });
+
+            const count = document.createElement('span');
+            count.textContent = `原长度 ${Array.from(original).length}，处理后的长度 ${Array.from(processed).length}`;
+
+            meta.append(copy, count);
+            item.append(text, meta);
+            results.prepend(item);
+        }
+
+        generateBtn.addEventListener('click', () => {
+            const original = sourceText.value;
+            if (!original) return;
+            addResult(original, transformText(original));
+        });
+
+        clearBtn.addEventListener('click', () => {
+            sourceText.value = '';
+            results.innerHTML = '';
+            sourceText.focus();
+        });
+    </script>
+</body>
+
+</html>
