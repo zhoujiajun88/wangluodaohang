@@ -134,10 +134,33 @@
             height: 10px;
             margin-right: 5px;
         }
+
+        .site-return {
+            position: fixed;
+            right: 14px;
+            bottom: 14px;
+            z-index: 20;
+            padding: 8px 11px;
+            border: 1px solid rgba(0,0,0,0.08);
+            border-radius: 8px;
+            color: #374151;
+            background: rgba(255,255,255,0.88);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 13px;
+            text-decoration: none;
+            backdrop-filter: blur(8px);
+        }
+
+        .site-return:hover {
+            color: #268bd2;
+            background: #fff;
+        }
     </style>
 </head>
 
 <body>
+    <a class="site-return" href="../index.html">← 拾用</a>
 
     <div id="left" class="panel">
         <h3>Input</h3>

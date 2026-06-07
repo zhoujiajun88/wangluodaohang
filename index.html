@@ -4,82 +4,177 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>网路集结 NetHub / wangluodaohang</title>
+    <title>拾用 - 常用工具与项目入口</title>
     <style>
+        :root {
+            --bg: #f6f8fb;
+            --surface: #ffffff;
+            --text: #111827;
+            --muted: #6b7280;
+            --border: #e5e7eb;
+            --primary: #2563eb;
+            --primary-soft: #dbeafe;
+            --radius: 8px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: sans-serif;
-            background: #f4f7f6;
+            min-height: 100vh;
             margin: 0;
-            padding: 40px;
+            color: var(--text);
+            background: var(--bg);
+            font-family: "Inter", "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
         }
 
         .container {
-            max-width: 1000px;
-            margin: auto;
+            width: min(1080px, calc(100% - 48px));
+            margin: 0 auto;
+            padding: 42px 0 28px;
         }
 
         .header {
             display: flex;
-            align-items: center;
-            margin-bottom: 40px;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 24px;
+            margin-bottom: 34px;
+        }
+
+        .brand {
+            max-width: 620px;
         }
 
         .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: #2563eb;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text);
+            font-size: 28px;
+            font-weight: 750;
+            line-height: 1;
+        }
+
+        .logo-mark {
+            position: relative;
+            width: 36px;
+            height: 36px;
+            flex: 0 0 auto;
+            border-radius: var(--radius);
+            background: var(--primary);
+            box-shadow: inset 0 -9px 16px rgba(17, 24, 39, 0.16);
+        }
+
+        .logo-mark::before,
+        .logo-mark::after {
+            content: "";
+            position: absolute;
+            background: #ffffff;
+        }
+
+        .logo-mark::before {
+            width: 15px;
+            height: 15px;
+            left: 8px;
+            top: 7px;
+            border-radius: 4px;
+        }
+
+        .logo-mark::after {
+            width: 14px;
+            height: 3px;
+            right: 7px;
+            bottom: 8px;
+            border-radius: 999px;
+        }
+
+        .section-head {
+            margin: 0 0 14px;
+        }
+
+        .section-title {
+            margin: 0;
+            color: #374151;
+            font-size: 14px;
+            font-weight: 700;
         }
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            gap: 16px;
         }
 
         .card {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
+            min-height: 154px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 18px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            color: var(--text);
+            background: var(--surface);
             text-decoration: none;
-            color: #333;
-            transition: 0.3s;
-            border: 1px solid #eee;
+            transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
         }
 
         .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transform: translateY(-3px);
+            border-color: #c7d2fe;
+            box-shadow: 0 14px 28px rgba(15, 23, 42, 0.08);
         }
 
-        .category-title {
-            grid-column: 1 / -1;
-            margin-top: 20px;
-            color: #666;
-            font-size: 14px;
-            text-transform: uppercase;
+        .tool-icon {
+            width: 38px;
+            height: 38px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius);
+            color: #1d4ed8;
+            background: var(--primary-soft);
+            font-size: 15px;
+            font-weight: 800;
+        }
+
+        .card strong {
+            display: block;
+            font-size: 18px;
+            line-height: 1.35;
+        }
+
+        .card small {
+            display: block;
+            margin-top: 6px;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.6;
         }
 
         .footer {
-            margin-top: 80px;
+            margin-top: 76px;
             padding-top: 20px;
-            border-top: 1px solid #e5e7eb;
+            border-top: 1px solid var(--border);
             text-align: center;
         }
 
         .friends {
-            font-size: 13px;
-            color: #6b7280;
             margin-bottom: 10px;
+            color: var(--muted);
+            font-size: 13px;
         }
 
         .friends a {
+            margin: 0 5px;
             color: #4b5563;
             text-decoration: none;
-            margin: 0 5px;
         }
 
         .friends a:hover {
-            color: #2563eb;
+            color: var(--primary);
             text-decoration: underline;
         }
 
@@ -88,37 +183,82 @@
         }
 
         .copyright {
-            font-size: 12px;
             color: #9ca3af;
-            /* 浅灰色，保持低调 */
+            font-size: 12px;
             letter-spacing: 0.5px;
+        }
+
+        @media (max-width: 720px) {
+            .container {
+                width: min(100% - 28px, 1080px);
+                padding-top: 28px;
+            }
+
+            .header {
+                display: block;
+            }
         }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <div class="header">
-            <div class="logo">🌐 NetHub / wangluodaohang</div>
-        </div>
-        <div class="grid">
-            <div class="category-title">常用工具</div>
-            <a href="/tools/text2pic.html" class="card"><strong>Text2Pic</strong><br><small>文本转图片</small></a>
-            <a href="/tools/colorpicker.html" class="card"><strong>Color Picker</strong><br><small>颜色选择器</small></a>
-            <a href="/tools/jsonparse.html" class="card"><strong>JSON Parse</strong><br><small>JSON格式化工具</small></a>
-        </div>
+        <header class="header">
+            <div class="brand">
+                <div class="logo"><span class="logo-mark" aria-hidden="true"></span><span>拾用</span></div>
+            </div>
+        </header>
+
+        <main>
+            <div class="section-head">
+                <h1 class="section-title">常用工具</h1>
+            </div>
+
+            <div class="grid">
+                <a href="tools/text2pic.html" class="card">
+                    <span class="tool-icon">文</span>
+                    <span>
+                        <strong>文本转图片</strong>
+                        <small>把一段文字快速导出成图片。</small>
+                    </span>
+                </a>
+
+                <a href="tools/colorpicker.html" class="card">
+                    <span class="tool-icon">色</span>
+                    <span>
+                        <strong>颜色选择器</strong>
+                        <small>浏览常用色值，点击复制。</small>
+                    </span>
+                </a>
+
+                <a href="tools/jsonparse.html" class="card">
+                    <span class="tool-icon">{ }</span>
+                    <span>
+                        <strong>JSON 格式化</strong>
+                        <small>格式化 JSON，并查看结构大纲。</small>
+                    </span>
+                </a>
+
+                <a href="https://github.com/zhoujiajun88/keyboard_mouse" class="card" target="_blank"
+                    rel="noopener noreferrer">
+                    <span class="tool-icon">键</span>
+                    <span>
+                        <strong>键盘模拟鼠标</strong>
+                        <small>通过键盘完成鼠标移动、点击等操作。</small>
+                    </span>
+                </a>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <div class="friends">
+                <a href="https://ixiaozhi.com" target="_blank" rel="noopener noreferrer">ixiaozhi</a> - deprecated
+                <span class="sep">|</span>
+                <a href="https://mail.zhoujiajun.com" target="_blank" rel="noopener noreferrer">mail</a>
+            </div>
+            <div class="copyright">© 2025 - 2026 ixiaozhi.</div>
+        </footer>
     </div>
-    <footer class="footer">
-        <div class="friends">
-            <a href="https://ixiaozhi.com" target="_blank">ixiaozhi</a> - deprecated
-            <span class="sep">|</span>
-            <a href="https://mail.zhoujiajun.com" target="_blank">mail</a>
-        </div>
-        <div class="copyright">
-            © 2025 - 2026 ixiaozhi.
-        </div>
-    </footer>
-    </style>
 </body>
 
 </html>
