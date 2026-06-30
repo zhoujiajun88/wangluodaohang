@@ -1,0 +1,719 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-H698BX2C0M"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-H698BX2C0M');
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>答案之书</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #1f2328;
+      --muted: #69707a;
+      --line: #d7dce2;
+      --paper: #f7f4ee;
+      --panel: #fffdf8;
+      --accent: #9b3f35;
+      --accent-dark: #742e27;
+      --gold: #b88638;
+      --green: #496b5b;
+      --shadow: 0 20px 60px rgba(34, 31, 27, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      min-height: 100%;
+      margin: 0;
+    }
+
+    body {
+      font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
+      color: var(--ink);
+      background:
+        linear-gradient(rgba(255, 253, 248, 0.72), rgba(255, 253, 248, 0.86)),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' fill='%23eee6d7'/%3E%3Cpath d='M0 34h180M0 90h180M0 146h180M34 0v180M90 0v180M146 0v180' stroke='%23d5c9b4' stroke-width='1' opacity='.45'/%3E%3Cpath d='M23 24c20 10 37 10 54 0 18-10 35-10 54 0 12 7 22 8 29 3M22 112c23-8 42-7 58 3 15 9 33 10 54 1 9-4 17-5 24-3' fill='none' stroke='%23bfae8f' stroke-width='1.2' opacity='.34'/%3E%3C/svg%3E");
+      background-size: cover, 180px 180px;
+    }
+
+    main {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: minmax(280px, 560px) minmax(320px, 1fr);
+      gap: clamp(24px, 5vw, 72px);
+      align-items: center;
+      padding: clamp(24px, 5vw, 72px);
+    }
+
+    .intro {
+      max-width: 560px;
+    }
+
+    .mark {
+      width: 76px;
+      height: 76px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 28px;
+      border: 1px solid rgba(184, 134, 56, 0.52);
+      background: rgba(255, 253, 248, 0.68);
+      box-shadow: inset 0 0 0 8px rgba(184, 134, 56, 0.08);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 34px;
+      color: var(--gold);
+    }
+
+    .site-return {
+      position: fixed;
+      top: 14px;
+      left: 14px;
+      z-index: 20;
+      padding: 8px 11px;
+      border: 1px solid rgba(116, 104, 87, 0.18);
+      border-radius: 8px;
+      color: var(--accent-dark);
+      background: rgba(255, 253, 248, 0.86);
+      box-shadow: 0 8px 24px rgba(34, 31, 27, 0.08);
+      font-size: 13px;
+      text-decoration: none;
+      backdrop-filter: blur(8px);
+    }
+
+    .site-return:hover {
+      color: #fff;
+      background: var(--accent-dark);
+    }
+
+    h1 {
+      margin: 0;
+      font-family: "Songti SC", "STSong", "Noto Serif SC", serif;
+      font-size: clamp(48px, 8vw, 104px);
+      line-height: 0.92;
+      font-weight: 700;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      max-width: 34em;
+      margin: 24px 0 0;
+      color: var(--muted);
+      font-size: clamp(16px, 2vw, 20px);
+      line-height: 1.8;
+    }
+
+    .workbench {
+      width: min(100%, 720px);
+      justify-self: center;
+      background: rgba(255, 253, 248, 0.9);
+      border: 1px solid rgba(116, 104, 87, 0.2);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 16px;
+      min-height: 56px;
+      padding: 0 18px;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+
+    .status::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 4px rgba(73, 107, 91, 0.14);
+    }
+
+    .console {
+      padding: clamp(18px, 4vw, 34px);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      color: #3e454d;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .input-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+    }
+
+    .action-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .action-row.is-hidden {
+      display: none;
+    }
+
+    input {
+      width: 100%;
+      min-width: 0;
+      height: 54px;
+      border: 1px solid #c9cfd6;
+      border-radius: 6px;
+      padding: 0 16px;
+      color: var(--ink);
+      background: #ffffff;
+      font: inherit;
+      font-size: 17px;
+      outline: none;
+      transition: border-color 160ms ease, box-shadow 160ms ease;
+    }
+
+    input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(155, 63, 53, 0.13);
+    }
+
+    button {
+      position: relative;
+      isolation: isolate;
+      height: 54px;
+      min-width: 136px;
+      border: 0;
+      border-radius: 6px;
+      padding: 0 20px;
+      color: #fff;
+      background: var(--accent);
+      font: inherit;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 120ms ease, background 160ms ease, box-shadow 160ms ease;
+      overflow: hidden;
+    }
+
+    .secondary-button {
+      color: var(--accent-dark);
+      border: 1px solid rgba(155, 63, 53, 0.32);
+      background: rgba(255, 253, 248, 0.8);
+    }
+
+    .secondary-button:hover {
+      color: #fff;
+      background: var(--accent-dark);
+    }
+
+    button::after {
+      content: "";
+      position: absolute;
+      inset: -60% auto -60% -70%;
+      z-index: -1;
+      width: 58%;
+      transform: skewX(-18deg);
+      background: rgba(255, 255, 255, 0.22);
+      transition: left 420ms ease;
+    }
+
+    button:hover {
+      background: var(--accent-dark);
+      box-shadow: 0 10px 24px rgba(116, 46, 39, 0.22);
+    }
+
+    button:hover::after {
+      left: 116%;
+    }
+
+    button:active {
+      transform: translateY(1px);
+    }
+
+    .answer-area {
+      position: relative;
+      min-height: 280px;
+      margin-top: 28px;
+      padding: clamp(24px, 5vw, 44px);
+      border: 1px solid rgba(184, 134, 56, 0.32);
+      background:
+        linear-gradient(90deg, rgba(184, 134, 56, 0.14) 1px, transparent 1px) left top / 34px 100%,
+        linear-gradient(#fffdf8, #fbf6ec);
+      overflow: hidden;
+      transition: box-shadow 220ms ease, transform 220ms ease;
+    }
+
+    .answer-area::before,
+    .answer-area::after {
+      content: "";
+      position: absolute;
+      left: 22px;
+      right: 22px;
+      height: 1px;
+      background: rgba(184, 134, 56, 0.32);
+    }
+
+    .answer-area::before {
+      top: 22px;
+    }
+
+    .answer-area::after {
+      bottom: 22px;
+    }
+
+    .answer-area.is-thinking {
+      transform: translateY(-2px);
+      box-shadow: inset 0 0 0 1px rgba(155, 63, 53, 0.12), 0 18px 38px rgba(34, 31, 27, 0.11);
+    }
+
+    .answer-area.is-thinking::before {
+      animation: scanLine 880ms ease-in-out infinite;
+    }
+
+    .answer {
+      position: relative;
+      display: grid;
+      place-items: center;
+      min-height: 190px;
+      margin: 0;
+      font-family: "Songti SC", "STSong", "Noto Serif SC", serif;
+      font-size: clamp(25px, 4vw, 42px);
+      line-height: 1.55;
+      text-align: center;
+      color: #2e2b27;
+    }
+
+    .coin-console {
+      display: none;
+      padding: clamp(18px, 4vw, 34px);
+    }
+
+    body.coin-mode .console {
+      display: none;
+    }
+
+    body.coin-mode .coin-console {
+      display: block;
+    }
+
+    body.coin-mode .toolbar {
+      display: none;
+    }
+
+    .coin-stage {
+      display: grid;
+      place-items: center;
+      min-height: 280px;
+      border: 1px solid rgba(184, 134, 56, 0.32);
+      background:
+        radial-gradient(circle at center, rgba(184, 134, 56, 0.18), transparent 58%),
+        linear-gradient(#fffdf8, #f4efe4);
+      perspective: 900px;
+    }
+
+    .coin {
+      width: clamp(150px, 30vw, 220px);
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      border: 10px solid #d3a24e;
+      background:
+        radial-gradient(circle at 32% 24%, rgba(255, 255, 255, 0.86), transparent 20%),
+        radial-gradient(circle at center, #f0c76a 0 46%, #c98c34 47% 100%);
+      box-shadow:
+        inset 0 0 0 8px rgba(116, 46, 39, 0.1),
+        inset 0 0 0 18px rgba(255, 253, 248, 0.18),
+        0 24px 40px rgba(34, 31, 27, 0.18);
+      color: #613b16;
+      font-family: "Songti SC", "STSong", "Noto Serif SC", serif;
+      font-size: clamp(36px, 8vw, 62px);
+      font-weight: 700;
+      transform-style: preserve-3d;
+    }
+
+    .coin.flipping {
+      animation: coinFlip 2850ms cubic-bezier(.2, .7, .2, 1) both;
+    }
+
+    .coin-result {
+      margin: 18px 0 0;
+      min-height: 40px;
+      color: #2e2b27;
+      font-family: "Songti SC", "STSong", "Noto Serif SC", serif;
+      font-size: clamp(22px, 4vw, 34px);
+      line-height: 1.4;
+      text-align: center;
+    }
+
+    .shake {
+      animation: reveal 420ms ease both;
+    }
+
+    .thinking {
+      animation: pulseText 680ms ease-in-out infinite alternate;
+    }
+
+    @keyframes reveal {
+      0% {
+        opacity: 0;
+        transform: translateY(10px);
+        filter: blur(5px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+      }
+    }
+
+    @keyframes pulseText {
+      from {
+        opacity: 0.48;
+        transform: scale(0.99);
+      }
+      to {
+        opacity: 0.9;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes scanLine {
+      0%, 100% {
+        transform: translateY(0);
+        opacity: 0.32;
+      }
+      50% {
+        transform: translateY(236px);
+        opacity: 0.7;
+      }
+    }
+
+    @keyframes coinFlip {
+      0% {
+        transform: rotateY(0) translateY(0) scale(1);
+      }
+      45% {
+        transform: rotateY(900deg) translateY(-28px) scale(1.06);
+      }
+      100% {
+        transform: rotateY(1800deg) translateY(0) scale(1);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 1ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 1ms !important;
+      }
+    }
+
+    @media (max-width: 900px) {
+      main {
+        grid-template-columns: 1fr;
+        align-items: start;
+      }
+
+      .intro {
+        max-width: 720px;
+      }
+
+      .workbench {
+        justify-self: stretch;
+      }
+    }
+
+    @media (max-width: 560px) {
+      main {
+        padding: 20px;
+      }
+
+      .mark {
+        width: 58px;
+        height: 58px;
+        margin-bottom: 18px;
+        font-size: 27px;
+      }
+
+      .subtitle {
+        margin-top: 16px;
+      }
+
+      .toolbar {
+        min-height: auto;
+        padding: 12px 14px;
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .input-row {
+        grid-template-columns: 1fr;
+      }
+
+      .action-row {
+        display: grid;
+      }
+
+      button {
+        width: 100%;
+      }
+
+      .answer-area {
+        min-height: 240px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="site-return" href="../index.html">← 拾用</a>
+  <main>
+    <section class="intro" aria-labelledby="page-title">
+      <div class="mark" aria-hidden="true">?</div>
+      <h1 id="page-title">答案之书</h1>
+      <p class="subtitle">把正在心里打转的事写下来，让页面替你从一百段答案里抽出一句。</p>
+    </section>
+
+    <section class="workbench" aria-label="答案抽取器">
+      <div class="toolbar">
+        <span class="status">正在等待你的问题</span>
+      </div>
+      <div class="console">
+        <label for="questionInput">问题关键词</label>
+        <div class="input-row">
+          <input id="questionInput" type="text" autocomplete="off" placeholder="例如：吃饭、出门、今天的小决定">
+          <button id="askButton" type="button">揭开答案</button>
+        </div>
+        <div class="answer-area" aria-live="polite" aria-atomic="true">
+          <p class="answer" id="answerText">先写下那个问题。</p>
+        </div>
+        <div class="action-row is-hidden" id="afterAnswerActions">
+          <button class="secondary-button" id="coinModeButton" type="button">我看不懂</button>
+        </div>
+      </div>
+      <div class="coin-console" aria-label="抛硬币模式">
+        <div class="coin-stage" aria-live="polite" aria-atomic="true">
+          <div class="coin" id="coin">?</div>
+        </div>
+        <p class="coin-result" id="coinResult">让硬币替你说得更直接一点。</p>
+      </div>
+    </section>
+  </main>
+
+  <script id="answers-json" type="application/json">
+[
+  "当你把#question#轻轻放在心里，答案会在安静处先亮一下。",
+  "#question#不急着被解决，它正在等你看见真正重要的那一层。",
+  "关于#question#，先别追问结局，风向已经开始改变。",
+  "你以为#question#需要一个明确的许可，其实它只需要你迈出很小的一步。",
+  "#question#的答案不会大声出现，它会借由一次偶然提醒你。",
+  "如果#question#让你迟疑，说明它触碰到了你正在成长的边界。",
+  "把#question#交给时间一晚，明天的你会更接近答案。",
+  "#question#不是阻碍，而是一扇还没有完全打开的门。",
+  "对于#question#，最好的回应也许是先停下来听听自己的心跳。",
+  "你已经知道#question#的一部分答案，只是还没有愿意承认。",
+  "#question#会向愿意保持诚实的人展开另一条路。",
+  "别急着定义#question#，它仍在成形。",
+  "当#question#变得沉重，说明你该把不属于你的部分放下。",
+  "#question#需要的不是更多解释，而是一个清晰的选择。",
+  "你越想控制#question#，它越会提醒你信任的重要。",
+  "关于#question#，答案藏在你最不想忽略的细节里。",
+  "#question#会有结果，但结果不会按照你最初想象的方式到来。",
+  "先照顾好自己，#question#才会显出真正的轮廓。",
+  "#question#正在把你带向一个更诚实的位置。",
+  "如果你愿意少一点恐惧，#question#会少一半复杂。",
+  "别把#question#交给焦虑裁决，交给清醒。",
+  "#question#的关键，不在别人怎么说，而在你是否愿意承担答案。",
+  "你需要的不是逃离#question#，而是换一种眼光靠近它。",
+  "当你不再急着证明什么，#question#会变得简单许多。",
+  "#question#正在等待一个恰好的时机，不是一个完美的时机。",
+  "对于#question#，先相信那个微弱却持续的直觉。",
+  "#question#提醒你：不是所有等待都是停滞。",
+  "你在#question#里看见的困惑，也许正是新方向的入口。",
+  "不要把#question#想得太绝对，它还有回旋的余地。",
+  "#question#会因一次坦白而改变重量。",
+  "在回答#question#之前，先问问自己真正害怕失去什么。",
+  "#question#不会毁掉你，它只是在请你重新排列优先级。",
+  "你对#question#的犹豫，是内心在要求更温柔的确认。",
+  "答案会来，但#question#先要求你保持耐心。",
+  "#question#之中有一件事已经结束，只是你还在用旧方式挽留。",
+  "越是关于#question#，越要相信简单的事实。",
+  "#question#需要一点勇气，也需要一点不打扰自己的善意。",
+  "如果#question#让你反复回头，那就看看是否还有未说完的话。",
+  "别让想象替#question#制造结论，去接近真实。",
+  "#question#的方向会在行动之后变清楚，而不是在空想里变清楚。",
+  "当你愿意承认不知道，#question#反而开始给出线索。",
+  "#question#不是一道惩罚你的题，它是在邀请你更了解自己。",
+  "你无需立刻回答#question#，但不要一直假装没有听见它。",
+  "#question#的门槛比你想象中低，跨过去需要的是决定。",
+  "关于#question#，别只看眼前的波动，要看更长的流向。",
+  "#question#会把不真诚的东西慢慢筛掉。",
+  "如果#question#迟迟没有答案，可能是因为你问得还不够准确。",
+  "你可以为#question#选择慢一点，但不要选择一直停在原地。",
+  "#question#真正考验的不是运气，而是你是否愿意清醒地面对。",
+  "让#question#安静几分钟，答案也许会从身体的放松里浮现。",
+  "你不必让所有人理解#question#，只要你自己不再逃避。",
+  "#question#正在靠近一个转折点，请保留一点空间。",
+  "当你放下必须正确的执念，#question#会露出更柔软的答案。",
+  "#question#里的不确定，不等于没有希望。",
+  "先完成眼前最小的一步，#question#会继续告诉你下一步。",
+  "如果#question#让你变得更真实，它就不是白白发生。",
+  "别为了立刻安心而替#question#选择一个仓促的答案。",
+  "#question#需要你相信：有些迟到的清楚，反而更可靠。",
+  "你已经走到#question#的门前，不要再用怀疑把自己带回原处。",
+  "#question#不会因为你慢一点就错过真正属于你的东西。",
+  "关于#question#，答案在靠近，但它需要你先整理心中的噪音。",
+  "#question#也许不是要你得到什么，而是要你放过什么。",
+  "你对#question#的执着里，藏着一个尚未被照顾的愿望。",
+  "当#question#反复出现，它并不是纠缠，而是在提醒你看见。",
+  "你可以相信#question#会有出口，即使现在还看不到门牌。",
+  "#question#的答案不一定热烈，却会让你心里安定下来。",
+  "别用过去的失败解释#question#，这一次有新的变量。",
+  "#question#需要你把注意力从结果移回选择本身。",
+  "如果#question#令你不安，先确认那份不安是否真的属于现在。",
+  "#question#将因一次小小的主动而改变走向。",
+  "不要急着把#question#交给命运，命运也在等你的配合。",
+  "#question#里的某个答案，其实一直被你放在最显眼的地方。",
+  "你越愿意诚实面对#question#，它越不会成为阴影。",
+  "关于#question#，请把期待调低，把行动调近。",
+  "#question#提醒你：温柔不是退让，清醒也不是冷漠。",
+  "当你不再反复询问别人，#question#会在你心里落定。",
+  "#question#需要边界，也需要一点开放。",
+  "若#question#让你感到迷失，就先回到最朴素的愿望。",
+  "你不能替#question#跳过过程，但可以让过程更诚实。",
+  "#question#的转机可能很安静，别错过那些细微的变化。",
+  "关于#question#，现在适合观察，不适合匆忙定论。",
+  "#question#会要求你放弃一个旧答案，才容得下新的答案。",
+  "如果#question#一直没有回应，也许沉默本身就是回应的一部分。",
+  "你对#question#的认真值得被尊重，但也别忘了给自己松绑。",
+  "#question#不会只带来一种可能，请允许另一种结局存在。",
+  "当你愿意承担选择，#question#就不再只是问题。",
+  "#question#的答案也许很近，只隔着一次不再拖延。",
+  "别让遗憾替#question#发言，让当下发言。",
+  "#question#正在帮你分辨什么是真正值得留下的。",
+  "你会在回头看的时候明白，#question#曾经推了你一把。",
+  "关于#question#，请相信那个让你变得更平静的方向。",
+  "#question#不是要你完美，而是要你开始。",
+  "如果#question#让你想起某个人，答案也许与未完成的告别有关。",
+  "你需要给#question#一个期限，也给自己一个出口。",
+  "#question#会在你停止自我怀疑时，变得更容易回答。",
+  "别把#question#藏得太深，适当说出来会带来新的光。",
+  "#question#里的难处是真实的，但你的力量也是真实的。",
+  "当你决定不再绕远路，#question#就会向你靠近。",
+  "#question#请你记住：真正的答案通常不会让你失去自己。",
+  "此刻关于#question#，最好的答案是：先向前一步，再听回声。"
+]
+  </script>
+  <script>
+    const answers = JSON.parse(document.getElementById("answers-json").textContent);
+    const input = document.getElementById("questionInput");
+    const button = document.getElementById("askButton");
+    const answerText = document.getElementById("answerText");
+    const answerArea = document.querySelector(".answer-area");
+    const status = document.querySelector(".status");
+    const afterAnswerActions = document.getElementById("afterAnswerActions");
+    const coinModeButton = document.getElementById("coinModeButton");
+    const coin = document.getElementById("coin");
+    const coinResult = document.getElementById("coinResult");
+    let revealTimer = 0;
+    let coinTimer = 0;
+    let activeQuestion = "";
+
+    function normalizeQuestion(value) {
+      return value.trim().replace(/\s+/g, " ");
+    }
+
+    function ask() {
+      const question = normalizeQuestion(input.value);
+
+      window.clearTimeout(revealTimer);
+
+      if (!question) {
+        input.focus();
+        answerText.textContent = "先写下那个问题。";
+        afterAnswerActions.classList.add("is-hidden");
+        answerText.classList.remove("thinking");
+        answerText.classList.remove("shake");
+        void answerText.offsetWidth;
+        answerText.classList.add("shake");
+        return;
+      }
+
+      const answer = answers[Math.floor(Math.random() * answers.length)];
+      answerArea.classList.add("is-thinking");
+      afterAnswerActions.classList.add("is-hidden");
+      answerText.classList.remove("shake");
+      answerText.classList.add("thinking");
+      answerText.textContent = "书页正在翻动...";
+      status.textContent = "正在翻找答案";
+      activeQuestion = question;
+
+      revealTimer = window.setTimeout(() => {
+        answerText.classList.remove("thinking");
+        answerText.textContent = answer.replaceAll("#question#", question);
+        answerArea.classList.remove("is-thinking");
+        status.textContent = "答案已经出现";
+        afterAnswerActions.classList.remove("is-hidden");
+        answerText.classList.remove("shake");
+        void answerText.offsetWidth;
+        answerText.classList.add("shake");
+      }, 620);
+    }
+
+    function enterCoinMode() {
+      window.clearTimeout(revealTimer);
+      document.body.classList.add("coin-mode");
+      coin.textContent = "?";
+      coinResult.textContent = "让硬币替你说得更直接一点。";
+      flipCoin();
+    }
+
+    function flipCoin() {
+      window.clearTimeout(coinTimer);
+      const result = Math.random() < 0.5 ? "正面" : "反面";
+      coin.textContent = "";
+      coinResult.textContent = "硬币正在空中翻转...";
+      coin.classList.remove("flipping");
+      void coin.offsetWidth;
+      coin.classList.add("flipping");
+
+      coinTimer = window.setTimeout(() => {
+        coin.textContent = result === "正面" ? "正" : "反";
+        coinResult.textContent = result === "正面" ? `${activeQuestion}：可以向前一步。` : `${activeQuestion}：先停一下。`;
+      }, 2700);
+    }
+
+    button.addEventListener("click", ask);
+    coinModeButton.addEventListener("click", enterCoinMode);
+    input.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        ask();
+      }
+    });
+  </script>
+</body>
+</html>
