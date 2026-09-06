@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh">
-
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <!-- Google tag (gtag.js) -->
@@ -9,380 +8,95 @@
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-
         gtag('config', 'G-H698BX2C0M');
     </script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f7f8fa">
     <title>拾用 - 常用工具与项目入口</title>
-    <style>
-        :root {
-            --bg: #f6f8fb;
-            --surface: #ffffff;
-            --text: #111827;
-            --muted: #6b7280;
-            --border: #e5e7eb;
-            --primary: #2563eb;
-            --primary-soft: #dbeafe;
-            --radius: 8px;
-        }
-
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            min-height: 100vh;
-            margin: 0;
-            color: var(--text);
-            background: var(--bg);
-            font-family: "Inter", "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
-        }
-
-        .container {
-            width: min(1080px, calc(100% - 48px));
-            margin: 0 auto;
-            padding: 42px 0 28px;
-        }
-
-        .header {
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            gap: 24px;
-            margin-bottom: 34px;
-        }
-
-        .brand {
-            max-width: 620px;
-        }
-
-        .logo {
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            color: var(--text);
-            font-size: 28px;
-            font-weight: 750;
-            line-height: 1;
-        }
-
-        .logo-mark {
-            position: relative;
-            width: 36px;
-            height: 36px;
-            flex: 0 0 auto;
-            border-radius: var(--radius);
-            background: var(--primary);
-            box-shadow: inset 0 -9px 16px rgba(17, 24, 39, 0.16);
-        }
-
-        .logo-mark::before,
-        .logo-mark::after {
-            content: "";
-            position: absolute;
-            background: #ffffff;
-        }
-
-        .logo-mark::before {
-            width: 15px;
-            height: 15px;
-            left: 8px;
-            top: 7px;
-            border-radius: 4px;
-        }
-
-        .logo-mark::after {
-            width: 14px;
-            height: 3px;
-            right: 7px;
-            bottom: 8px;
-            border-radius: 999px;
-        }
-
-        .section-head {
-            margin: 0 0 14px;
-        }
-
-        .section-title {
-            margin: 0;
-            color: #374151;
-            font-size: 14px;
-            font-weight: 700;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-            gap: 16px;
-        }
-
-        .card {
-            min-height: 154px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            padding: 18px;
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            color: var(--text);
-            background: var(--surface);
-            text-decoration: none;
-            cursor: grab;
-            transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-3px);
-            border-color: #c7d2fe;
-            box-shadow: 0 14px 28px rgba(15, 23, 42, 0.08);
-        }
-
-        .card.dragging {
-            cursor: grabbing;
-            opacity: 0.55;
-            transform: scale(0.98);
-        }
-
-        .tool-icon {
-            width: 38px;
-            height: 38px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: var(--radius);
-            color: #1d4ed8;
-            background: var(--primary-soft);
-            font-size: 15px;
-            font-weight: 800;
-        }
-
-        .card strong {
-            display: block;
-            font-size: 18px;
-            line-height: 1.35;
-        }
-
-        .card small {
-            display: block;
-            margin-top: 6px;
-            color: var(--muted);
-            font-size: 13px;
-            line-height: 1.6;
-        }
-
-        .footer {
-            margin-top: 76px;
-            padding-top: 20px;
-            border-top: 1px solid var(--border);
-            text-align: center;
-        }
-
-        .friends {
-            margin-bottom: 10px;
-            color: var(--muted);
-            font-size: 13px;
-        }
-
-        .friends a {
-            margin: 0 5px;
-            color: #4b5563;
-            text-decoration: none;
-        }
-
-        .friends a:hover {
-            color: var(--primary);
-            text-decoration: underline;
-        }
-
-        .sep {
-            color: #d1d5db;
-        }
-
-        .copyright {
-            color: #9ca3af;
-            font-size: 12px;
-            letter-spacing: 0.5px;
-        }
-
-        @media (max-width: 720px) {
-            .container {
-                width: min(100% - 28px, 1080px);
-                padding-top: 28px;
-            }
-
-            .header {
-                display: block;
-            }
-        }
-    </style>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="assets/home.css">
+    <script src="assets/vendor/Sortable.min.js" defer></script>
+    <script src="assets/home.js" defer></script>
 </head>
-
 <body>
     <div class="container">
         <header class="header">
-            <div class="brand">
-                <div class="logo"><span class="logo-mark" aria-hidden="true"></span><span>拾用</span></div>
-            </div>
+            <a class="logo" href="./" aria-label="拾用首页">
+                <img src="assets/favicon.svg" width="40" height="40" alt="">
+                <span>拾用</span>
+            </a>
         </header>
-
         <main>
             <div class="section-head">
-                <h1 class="section-title">常用工具</h1>
+                <h1>常用工具 <span class="tool-count" aria-label="7 个工具">07</span></h1>
+                <div class="order-actions" hidden>
+                    <button class="icon-button" id="resetOrder" type="button" aria-label="恢复默认排序" data-tooltip="恢复默认排序" hidden>
+                        <svg aria-hidden="true"><use href="assets/icons.svg#rotate-ccw"></use></svg>
+                    </button>
+                    <button class="icon-button" id="sortToggle" type="button" aria-pressed="false" aria-label="调整排序" data-tooltip="调整排序">
+                        <svg class="sort-icon" aria-hidden="true"><use href="assets/icons.svg#sliders-horizontal"></use></svg>
+                        <svg class="done-icon" aria-hidden="true"><use href="assets/icons.svg#check"></use></svg>
+                    </button>
+                </div>
             </div>
-
-            <div class="grid" id="toolGrid">
-                <a href="tools/text2pic.html" class="card" draggable="true" data-tool-id="text2pic">
-                    <span class="tool-icon">文</span>
-                    <span>
-                        <strong>Text2Pic</strong>
-                        <small>文本转图片</small>
-                    </span>
-                </a>
-
-                <a href="tools/colorpicker.html" class="card" draggable="true" data-tool-id="colorpicker">
-                    <span class="tool-icon">色</span>
-                    <span>
-                        <strong>Color Picker</strong>
-                        <small>颜色选择器</small>
-                    </span>
-                </a>
-
-                <a href="tools/jsonparse.html" class="card" draggable="true" data-tool-id="jsonparse">
-                    <span class="tool-icon">{ }</span>
-                    <span>
-                        <strong>JSON Parse</strong>
-                        <small>JSON 格式化</small>
-                    </span>
-                </a>
-
-                <a href="https://github.com/zhoujiajun88/keyboard_mouse" class="card" target="_blank"
-                    rel="noopener noreferrer" draggable="true" data-tool-id="keyboard-mouse">
-                    <span class="tool-icon">键</span>
-                    <span>
-                        <strong>Keyboard Mouse</strong>
-                        <small>键盘模拟鼠标</small>
-                    </span>
-                </a>
-
-                <a href="https://github.com/zhoujiajun88/keyboard_swap" class="card" target="_blank"
-                    rel="noopener noreferrer" draggable="true" data-tool-id="keyboard-swap">
-                    <span class="tool-icon">换</span>
-                    <span>
-                        <strong>Keyboard Swap</strong>
-                        <small>交换键盘键位</small>
-                    </span>
-                </a>
-
-                <a href="tools/empty.html" class="card" draggable="true" data-tool-id="emptychar">
-                    <span class="tool-icon">空</span>
-                    <span>
-                        <strong>EmptyChar</strong>
-                        <small>插入空白字符</small>
-                    </span>
-                </a>
-
-                <a href="tools/answer_book.html" class="card" draggable="true" data-tool-id="answer-book">
-                    <span class="tool-icon">答</span>
-                    <span>
-                        <strong>The Book of Answers</strong>
-                        <small>答案之书</small>
-                    </span>
-                </a>
-            </div>
+            <ul class="grid" id="toolGrid" aria-label="工具列表">
+                <li class="card" data-tool-id="text2pic" style="--accent:#2563eb;--tint:#edf3ff">
+                    <a class="tool-link" href="tools/text2pic.html" draggable="false">
+                        <span class="tool-icon"><svg aria-hidden="true"><use href="assets/icons.svg#image"></use></svg></span>
+                        <span class="tool-text"><strong>Text2Pic</strong><small>文本转图片</small></span>
+                    </a>
+                </li>
+                <li class="card" data-tool-id="colorpicker" style="--accent:#b7476c;--tint:#fcedf2">
+                    <a class="tool-link" href="tools/colorpicker.html" draggable="false">
+                        <span class="tool-icon"><svg aria-hidden="true"><use href="assets/icons.svg#palette"></use></svg></span>
+                        <span class="tool-text"><strong>Color Picker</strong><small>颜色选择器</small></span>
+                    </a>
+                </li>
+                <li class="card" data-tool-id="jsonparse" style="--accent:#208264;--tint:#eaf6ef">
+                    <a class="tool-link" href="tools/jsonparse.html" draggable="false">
+                        <span class="tool-icon"><svg aria-hidden="true"><use href="assets/icons.svg#braces"></use></svg></span>
+                        <span class="tool-text"><strong>JSON Parse</strong><small>JSON 格式化</small></span>
+                    </a>
+                </li>
+                <li class="card" data-tool-id="keyboard-mouse" style="--accent:#586176;--tint:#eef0f5">
+                    <a class="tool-link" href="https://github.com/zhoujiajun88/keyboard_mouse" target="_blank" rel="noopener noreferrer" draggable="false">
+                        <span class="tool-icon"><svg aria-hidden="true"><use href="assets/icons.svg#mouse-pointer-2"></use></svg></span>
+                        <span class="tool-text"><strong>Keyboard Mouse</strong><small>键盘模拟鼠标</small></span>
+                        <svg class="external-icon" aria-hidden="true"><use href="assets/icons.svg#arrow-up-right"></use></svg>
+                        <span class="sr-only">（GitHub，在新标签页打开）</span>
+                    </a>
+                </li>
+                <li class="card" data-tool-id="keyboard-swap" style="--accent:#936423;--tint:#faf3e7">
+                    <a class="tool-link" href="https://github.com/zhoujiajun88/keyboard_swap" target="_blank" rel="noopener noreferrer" draggable="false">
+                        <span class="tool-icon"><svg aria-hidden="true"><use href="assets/icons.svg#keyboard"></use></svg></span>
+                        <span class="tool-text"><strong>Keyboard Swap</strong><small>交换键盘键位</small></span>
+                        <svg class="external-icon" aria-hidden="true"><use href="assets/icons.svg#arrow-up-right"></use></svg>
+                        <span class="sr-only">（GitHub，在新标签页打开）</span>
+                    </a>
+                </li>
+                <li class="card" data-tool-id="emptychar" style="--accent:#217d89;--tint:#e9f5f6">
+                    <a class="tool-link" href="tools/empty.html" draggable="false">
+                        <span class="tool-icon"><svg aria-hidden="true"><use href="assets/icons.svg#text-cursor-input"></use></svg></span>
+                        <span class="tool-text"><strong>EmptyChar</strong><small>插入空白字符</small></span>
+                    </a>
+                </li>
+                <li class="card" data-tool-id="answer-book" style="--accent:#9b3f35;--tint:#f9eeea">
+                    <a class="tool-link" href="tools/answer_book.html" draggable="false">
+                        <span class="tool-icon"><svg aria-hidden="true"><use href="assets/icons.svg#book-open"></use></svg></span>
+                        <span class="tool-text"><strong>The Book of Answers</strong><small>答案之书</small></span>
+                    </a>
+                </li>
+            </ul>
+            <p id="orderStatus" class="sr-only" role="status" aria-live="polite"></p>
         </main>
-
         <footer class="footer">
+            <span class="copyright">© 2025 - 2026 拾用</span>
             <div class="friends">
-                <a href="https://ixiaozhi.com" target="_blank" rel="noopener noreferrer">ixiaozhi</a> - deprecated
-                <span class="sep">|</span>
+                <a href="https://ixiaozhi.com" target="_blank" rel="noopener noreferrer">ixiaozhi</a>
+                <span aria-hidden="true">/</span>
                 <a href="https://mail.zhoujiajun.com" target="_blank" rel="noopener noreferrer">mail</a>
             </div>
-            <div class="copyright">© 2025 - 2026 ixiaozhi.</div>
         </footer>
     </div>
-    <script>
-        const toolGrid = document.getElementById('toolGrid');
-        const orderCookieName = 'toolOrder';
-        let draggedCard = null;
-        let dragMoved = false;
-
-        function readCookie(name) {
-            return document.cookie
-                .split('; ')
-                .find(row => row.startsWith(`${name}=`))
-                ?.split('=')[1];
-        }
-
-        function saveToolOrder() {
-            const order = Array.from(toolGrid.querySelectorAll('.card'))
-                .map(card => card.dataset.toolId)
-                .join(',');
-            document.cookie = `${orderCookieName}=${encodeURIComponent(order)}; max-age=31536000; path=/; SameSite=Lax`;
-        }
-
-        function restoreToolOrder() {
-            const saved = readCookie(orderCookieName);
-            if (!saved) return;
-
-            const ids = decodeURIComponent(saved).split(',').filter(Boolean);
-            const cards = new Map(Array.from(toolGrid.querySelectorAll('.card')).map(card => [card.dataset.toolId, card]));
-
-            ids.forEach(id => {
-                const card = cards.get(id);
-                if (card) {
-                    toolGrid.appendChild(card);
-                    cards.delete(id);
-                }
-            });
-
-            cards.forEach(card => toolGrid.appendChild(card));
-        }
-
-        function placeDraggedCard(target, event) {
-            if (!draggedCard || !target || target === draggedCard) return;
-
-            const rect = target.getBoundingClientRect();
-            const isAfter = event.clientY > rect.top + rect.height / 2 ||
-                (Math.abs(event.clientY - (rect.top + rect.height / 2)) < rect.height / 2 &&
-                    event.clientX > rect.left + rect.width / 2);
-
-            toolGrid.insertBefore(draggedCard, isAfter ? target.nextSibling : target);
-            dragMoved = true;
-        }
-
-        restoreToolOrder();
-
-        toolGrid.addEventListener('dragstart', event => {
-            const card = event.target.closest('.card');
-            if (!card) return;
-
-            draggedCard = card;
-            dragMoved = false;
-            event.dataTransfer.effectAllowed = 'move';
-            event.dataTransfer.setData('text/plain', card.dataset.toolId);
-            requestAnimationFrame(() => card.classList.add('dragging'));
-        });
-
-        toolGrid.addEventListener('dragover', event => {
-            event.preventDefault();
-            const target = event.target.closest('.card');
-            placeDraggedCard(target, event);
-        });
-
-        toolGrid.addEventListener('dragend', () => {
-            if (draggedCard) {
-                draggedCard.classList.remove('dragging');
-            }
-            draggedCard = null;
-            saveToolOrder();
-        });
-
-        toolGrid.addEventListener('click', event => {
-            if (!dragMoved) return;
-            event.preventDefault();
-            dragMoved = false;
-        });
-    </script>
 </body>
-
 </html>

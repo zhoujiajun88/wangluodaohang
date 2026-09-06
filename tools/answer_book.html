@@ -12,7 +12,9 @@
     gtag('config', 'G-H698BX2C0M');
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>答案之书</title>
+  <title>答案之书 The Book of Answers / wangluodaohang</title>
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/site.css">
   <style>
     :root {
       color-scheme: light;
@@ -26,6 +28,10 @@
       --gold: #b88638;
       --green: #496b5b;
       --shadow: 0 20px 60px rgba(34, 31, 27, 0.14);
+      --site-surface: #fffdf8;
+      --site-line: #e4ddd2;
+      --site-ink: #766657;
+      --site-accent: #9b3f35;
     }
 
     * {
@@ -39,6 +45,7 @@
     }
 
     body {
+      padding-top: 56px;
       font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
       color: var(--ink);
       background:
@@ -48,7 +55,7 @@
     }
 
     main {
-      min-height: 100vh;
+      min-height: calc(100vh - 56px);
       display: grid;
       grid-template-columns: minmax(280px, 560px) minmax(320px, 1fr);
       gap: clamp(24px, 5vw, 72px);
@@ -98,8 +105,8 @@
     h1 {
       margin: 0;
       font-family: "Songti SC", "STSong", "Noto Serif SC", serif;
-      font-size: clamp(48px, 8vw, 104px);
-      line-height: 0.92;
+      font-size: 80px;
+      line-height: 1.15;
       font-weight: 700;
       letter-spacing: 0;
     }
@@ -108,7 +115,7 @@
       max-width: 34em;
       margin: 24px 0 0;
       color: var(--muted);
-      font-size: clamp(16px, 2vw, 20px);
+      font-size: 18px;
       line-height: 1.8;
     }
 
@@ -434,6 +441,7 @@
     }
 
     @media (max-width: 900px) {
+      h1 { font-size: 60px; }
       main {
         grid-template-columns: 1fr;
         align-items: start;
@@ -449,6 +457,8 @@
     }
 
     @media (max-width: 560px) {
+      h1 { font-size: 44px; }
+      .subtitle { font-size: 16px; }
       main {
         padding: 20px;
       }
@@ -490,7 +500,7 @@
   </style>
 </head>
 <body>
-  <a class="site-return" href="../index.html">← 拾用</a>
+  <nav class="site-nav" aria-label="站点导航"><a class="site-return" href="../index.html"><svg aria-hidden="true"><use href="../assets/icons.svg#arrow-left"></use></svg>拾用</a><span class="site-name">The Book of Answers</span></nav>
   <main>
     <section class="intro" aria-labelledby="page-title">
       <div class="mark" aria-hidden="true">?</div>

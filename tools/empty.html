@@ -14,6 +14,8 @@
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>插入空白字符 EmptyChar / wangluodaohang</title>
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="../assets/site.css">
     <style>
         :root {
             --bg: #f7f8fb;
@@ -60,7 +62,7 @@
         .wrap {
             width: min(920px, calc(100% - 32px));
             margin: 0 auto;
-            padding: 72px 0 40px;
+            padding: 92px 0 40px;
         }
 
         h1 {
@@ -161,19 +163,24 @@
         .copy-link:hover {
             text-decoration: underline;
         }
+        .actions button { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+        .actions svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+        .page-subtitle { margin: -8px 0 24px; color: var(--muted); font-size: 14px; }
+        .copy-link { display: inline-block; min-width: 56px; padding: 7px 0; }
     </style>
 </head>
 
 <body>
-    <a class="site-return" href="../index.html">← 拾用</a>
+    <nav class="site-nav" aria-label="站点导航"><a class="site-return" href="../index.html"><svg aria-hidden="true"><use href="../assets/icons.svg#arrow-left"></use></svg>拾用</a><span class="site-name">EmptyChar</span></nav>
 
     <main class="wrap">
-        <h1>empty</h1>
-        <textarea id="sourceText" placeholder="输入原始文本"></textarea>
+        <h1>EmptyChar</h1>
+        <p class="page-subtitle">插入空白字符</p>
+        <textarea id="sourceText" aria-label="原始文本" placeholder="输入原始文本"></textarea>
 
         <div class="actions">
-            <button class="btn-primary" id="generateBtn" type="button">生成新文本</button>
-            <button class="btn-ghost" id="clearBtn" type="button">清空</button>
+            <button class="btn-primary" id="generateBtn" type="button"><svg aria-hidden="true"><use href="../assets/icons.svg#wand-sparkles"></use></svg>生成新文本</button>
+            <button class="btn-ghost" id="clearBtn" type="button"><svg aria-hidden="true"><use href="../assets/icons.svg#trash-2"></use></svg>清空</button>
         </div>
 
         <section class="results" id="results" aria-live="polite"></section>

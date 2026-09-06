@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
     <meta charset="UTF-8">
     <!-- Google tag (gtag.js) -->
@@ -9,264 +8,182 @@
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-
         gtag('config', 'G-H698BX2C0M');
     </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>JSON格式化工具 JSON Parse / wangluodaohang</title>
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="../assets/site.css">
     <style>
-        :root {
-            --key: #881391;
-            --string: #268bd2;
-            --number: #1c00cf;
-            --outline-bg: #f8f9fa;
-        }
-
-        body {
-            display: flex;
-            height: 100vh;
-            margin: 0;
-            font-family: 'Segoe UI', Monaco, monospace;
-            font-size: 13px;
-            color: #333;
-        }
-
-        .panel {
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            border-right: 1px solid #ddd;
-        }
-
-        #left {
-            width: 20%;
-        }
-
-        #center {
-            width: 55%;
-            background:  #f8f8f2;
-            overflow: auto;
-        }
-
-        #right {
-            width: 25%;
-            background: var(--outline-bg);
-            overflow: auto;
-        }
-
-        textarea {
-            flex: 1;
-            border: none;
-            padding: 15px;
-            outline: none;
-            background: #fff;
-            color: #272822;
-            line-height: 1.5;
-            resize: none;
-        }
-
-        h3 {
-            margin: 0;
-            padding: 10px;
-            font-size: 12px;
-            background: #eee;
-            text-transform: uppercase;
-            color: #666;
-        }
-
-        /* 中部渲染样式 */
-        .node {
-            margin-left: 20px;
-            line-height: 1.6;
-            position: relative;
-        }
-
-        .toggle {
-            cursor: pointer;
-            position: absolute;
-            left: -15px;
-            user-select: none;
-            color: #999;
-        }
-
-        .toggle:hover {
-            color: #333;
-        }
-
-        .collapsed>.content {
-            display: none;
-        }
-
-        .collapsed>.toggle::after {
-            content: '▶';
-        }
-
-        .toggle::after {
-            content: '▼';
-        }
-
-        .key {
-            color: var(--key);
-            font-weight: bold;
-        }
-
-        .string {
-            color: var(--string);
-        }
-
-        .number {
-            color: var(--number);
-        }
-
-        .bracket {
-            color: #555;
-            font-weight: bold;
-        }
-
-        /* 右侧大纲样式 */
-        .outline-item {
-            padding: 5px 15px;
-            border-left: 2px solid transparent;
-            color: #555;
-            transition: 0.2s;
-        }
-
-        .outline-item:hover {
-            background: #e9ecef;
-            border-left-color: var(--string);
-            color: #000;
-        }
-
-        .indent {
-            display: inline-block;
-            width: 15px;
-            border-left: 1px dotted #ccc;
-            height: 10px;
-            margin-right: 5px;
-        }
-
-        .site-return {
-            position: fixed;
-            right: 14px;
-            bottom: 14px;
-            z-index: 20;
-            padding: 8px 11px;
-            border: 1px solid rgba(0,0,0,0.08);
-            border-radius: 8px;
-            color: #374151;
-            background: rgba(255,255,255,0.88);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-            font-family: 'Segoe UI', sans-serif;
-            font-size: 13px;
-            text-decoration: none;
-            backdrop-filter: blur(8px);
-        }
-
-        .site-return:hover {
-            color: #268bd2;
-            background: #fff;
+        :root { --key: #881391; --string: #268bd2; --number: #1c00cf; --outline-bg: #f8f9fa; --site-accent: #208264; }
+        * { box-sizing: border-box; }
+        body { height: 100vh; height: 100dvh; margin: 0; padding-top: 56px; font: 13px "Segoe UI", Monaco, monospace; color: #333; }
+        .workspace { display: flex; height: 100%; }
+        .mobile-tabs { display: none; }
+        [hidden] { display: none !important; }
+        .panel { min-width: 0; height: 100%; display: flex; flex-direction: column; border-right: 1px solid #ddd; }
+        #left { width: 30%; }
+        #center { width: 45%; background: #f8f8f2; overflow: auto; }
+        #right { width: 25%; background: var(--outline-bg); overflow: auto; border-right: 0; }
+        textarea { width: 100%; min-height: 0; flex: 1; border: 0; padding: 16px; background: #fff; color: #272822; resize: none; font: 14px/1.7 Consolas, Monaco, monospace; }
+        textarea:focus-visible { outline-offset: -3px; }
+        h3 { margin: 0; padding: 14px 16px; font-size: 12px; background: #f0f1f3; text-transform: uppercase; color: #666; }
+        #jsonView { padding: 16px; overflow-wrap: anywhere; }
+        .node { margin-left: 20px; line-height: 1.7; position: relative; }
+        .toggle { position: absolute; left: -20px; width: 20px; height: 22px; padding: 0; border: 0; background: transparent; font-size: 10px; color: #808791; cursor: pointer; }
+        .toggle:hover { color: #333; }
+        .collapsed > .content { display: none; }
+        .toggle::after { content: '\25BE'; }
+        .collapsed > .toggle::after { content: '\25B8'; }
+        .key { color: var(--key); font-weight: 600; }
+        .string { color: var(--string); }
+        .number { color: var(--number); }
+        .outline-item { padding: 7px 16px; border-left: 2px solid transparent; color: #555; overflow-wrap: anywhere; }
+        .outline-item:hover { background: #e9ecef; border-left-color: var(--string); }
+        .error { color: #b42332; }
+        @media (max-width: 720px) {
+            .mobile-tabs { display: flex; height: 48px; border-bottom: 1px solid #e4e7eb; background: #fff; }
+            .mobile-tabs button { flex: 1; min-width: 0; border: 0; border-bottom: 2px solid transparent; background: transparent; color: #6b7280; font: 14px "Segoe UI", "Microsoft YaHei", sans-serif; cursor: pointer; }
+            .mobile-tabs button[aria-selected="true"] { border-bottom-color: #208264; color: #17694e; background: #f3faf6; }
+            .mobile-tabs button:focus-visible { outline-offset: -4px; }
+            .workspace { height: calc(100% - 48px); }
+            #left, #center, #right { width: 100%; border-right: 0; }
+            .panel h3 { display: none; }
+            textarea { font-size: 16px; }
         }
     </style>
 </head>
-
 <body>
-    <a class="site-return" href="../index.html">← 拾用</a>
-
-    <div id="left" class="panel">
-        <h3>Input</h3>
-        <textarea id="jsonInput" placeholder="input JSON..."></textarea>
+    <nav class="site-nav" aria-label="站点导航"><a class="site-return" href="../index.html"><svg aria-hidden="true"><use href="../assets/icons.svg#arrow-left"></use></svg>拾用</a><span class="site-name">JSON Parse</span></nav>
+    <div class="mobile-tabs" role="tablist" aria-label="JSON 视图">
+        <button type="button" id="tab-left" role="tab" aria-controls="left" aria-selected="true">输入</button>
+        <button type="button" id="tab-center" role="tab" aria-controls="center" aria-selected="false" tabindex="-1">格式化</button>
+        <button type="button" id="tab-right" role="tab" aria-controls="right" aria-selected="false" tabindex="-1">大纲</button>
     </div>
-
-    <div id="center" class="panel">
-        <h3>Formatted View</h3>
-        <div id="jsonView" style="padding: 15px;"></div>
-    </div>
-
-    <div id="right" class="panel">
-        <h3>Structure Outline</h3>
-        <div id="outlineView"></div>
-    </div>
-
+    <main class="workspace" aria-label="JSON 格式化">
+        <div id="left" class="panel">
+            <h3>Input</h3>
+            <textarea id="jsonInput" aria-label="原始 JSON" placeholder="input JSON..." spellcheck="false"></textarea>
+        </div>
+        <div id="center" class="panel">
+            <h3>Formatted View</h3>
+            <div id="jsonView"></div>
+        </div>
+        <div id="right" class="panel">
+            <h3>Structure Outline</h3>
+            <div id="outlineView"></div>
+        </div>
+    </main>
     <script>
         const input = document.getElementById('jsonInput');
         const view = document.getElementById('jsonView');
         const outline = document.getElementById('outlineView');
+        const tabs = Array.from(document.querySelectorAll('[role="tab"]'));
+        const mobile = matchMedia('(max-width: 720px)');
+        let selectedPanel = 'left';
+
+        function syncPanels() {
+            tabs.forEach(tab => {
+                const id = tab.getAttribute('aria-controls');
+                const selected = id === selectedPanel;
+                tab.setAttribute('aria-selected', String(selected));
+                tab.tabIndex = selected ? 0 : -1;
+                const panel = document.getElementById(id);
+                panel.hidden = mobile.matches && !selected;
+                panel.setAttribute('role', mobile.matches ? 'tabpanel' : 'region');
+                panel.setAttribute('aria-label', tab.textContent);
+                panel.tabIndex = mobile.matches ? 0 : -1;
+            });
+        }
+        tabs.forEach((tab, index) => {
+            tab.addEventListener('click', () => {
+                selectedPanel = tab.getAttribute('aria-controls');
+                syncPanels();
+            });
+            tab.addEventListener('keydown', event => {
+                let next;
+                if (event.key === 'ArrowRight') next = (index + 1) % tabs.length;
+                if (event.key === 'ArrowLeft') next = (index + tabs.length - 1) % tabs.length;
+                if (event.key === 'Home') next = 0;
+                if (event.key === 'End') next = tabs.length - 1;
+                if (next === undefined) return;
+                event.preventDefault();
+                tabs[next].click();
+                tabs[next].focus();
+            });
+        });
+        mobile.addEventListener('change', syncPanels);
+        syncPanels();
 
         input.addEventListener('input', () => {
+            view.replaceChildren();
+            outline.replaceChildren();
+            if (!input.value.trim()) return;
             try {
                 const data = JSON.parse(input.value);
-                view.innerHTML = '';
-                outline.innerHTML = '';
                 renderView(data, view);
                 renderOutline(data, outline);
-            } catch (e) {
-                view.innerHTML = '<span style="color:red">JSON 语法错误</span>';
+            } catch {
+                const error = document.createElement('p');
+                error.className = 'error';
+                error.setAttribute('role', 'status');
+                error.textContent = 'JSON 语法错误';
+                view.appendChild(error);
             }
         });
 
-        // --- 中部渲染：隐藏数组索引 ---
         function renderView(data, container, key = null, isArrayChild = false) {
             const row = document.createElement('div');
             row.className = 'node';
-
-            // 如果是数组的直接子元素，不显示 key (0, 1, 2...)
             if (key !== null && !isArrayChild) {
                 const kSpan = document.createElement('span');
                 kSpan.className = 'key';
                 kSpan.textContent = `"${key}": `;
                 row.appendChild(kSpan);
             }
-
             if (data !== null && typeof data === 'object') {
                 const isArr = Array.isArray(data);
-                const t = document.createElement('span');
-                t.className = 'toggle';
-                t.onclick = () => row.classList.toggle('collapsed');
-                row.appendChild(t);
-
+                const toggle = document.createElement('button');
+                toggle.type = 'button';
+                toggle.className = 'toggle';
+                toggle.setAttribute('aria-label', key === null ? '折叠或展开 JSON' : `折叠或展开 ${key}`);
+                toggle.setAttribute('aria-expanded', 'true');
+                toggle.onclick = () => {
+                    row.classList.toggle('collapsed');
+                    toggle.setAttribute('aria-expanded', String(!row.classList.contains('collapsed')));
+                };
+                row.appendChild(toggle);
                 row.appendChild(document.createTextNode(isArr ? '[' : '{'));
-
                 const content = document.createElement('div');
                 content.className = 'content';
-                for (let k in data) {
-                    renderView(data[k], content, k, isArr); // 传入 isArr 标记
-                }
+                for (const k of Object.keys(data)) renderView(data[k], content, k, isArr);
                 row.appendChild(content);
                 row.appendChild(document.createTextNode(isArr ? ']' : '}'));
             } else {
-                const vSpan = document.createElement('span');
-                vSpan.className = typeof data;
-                vSpan.textContent = typeof data === 'string' ? `"${data}"` : data;
-                row.appendChild(vSpan);
+                const value = document.createElement('span');
+                value.className = typeof data;
+                value.textContent = typeof data === 'string' ? `"${data}"` : String(data);
+                row.appendChild(value);
             }
             container.appendChild(row);
         }
 
-        // --- 右侧渲染：去重逻辑 ---
+        // The outline samples the first array item, preserving the original compact view.
         function renderOutline(data, container, depth = 0) {
             if (data === null || typeof data !== 'object') return;
-
-            const keys = Array.isArray(data) ? [] : Object.keys(data);
-
-            // 如果是数组，我们只对第一个元素进行结构建模，避免后面重复显示
             if (Array.isArray(data)) {
-                if (data.length > 0) {
-                    renderOutline(data[0], container, depth);
-                }
+                if (data.length > 0) renderOutline(data[0], container, depth);
             } else {
-                for (let k in data) {
+                for (const key of Object.keys(data)) {
                     const item = document.createElement('div');
                     item.className = 'outline-item';
                     item.style.paddingLeft = `${depth * 15 + 15}px`;
-                    item.innerHTML = `<span>📂 ${k}</span>`;
+                    item.textContent = key;
                     container.appendChild(item);
-
-                    if (typeof data[k] === 'object') {
-                        renderOutline(data[k], container, depth + 1);
-                    }
+                    if (typeof data[key] === 'object') renderOutline(data[key], container, depth + 1);
                 }
             }
         }
     </script>
 </body>
-
 </html>

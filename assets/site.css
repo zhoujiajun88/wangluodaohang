@@ -1,0 +1,9 @@
+/* Only the shared navigation belongs here; each tool owns its workspace style. */
+.site-nav { box-sizing: border-box; position: fixed; inset: 0 0 auto; z-index: 100; height: 56px; display: flex; align-items: center; gap: 16px; padding: 0 22px; border-bottom: 1px solid var(--site-line, #e4e7eb); background: var(--site-surface, #ffffff); color: var(--site-ink, #5f6772); font: 13px/1.4 "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; letter-spacing: 0; }
+.site-nav .site-return { position: static; display: inline-flex; align-items: center; gap: 8px; min-height: 36px; padding: 0; border: 0; border-radius: 4px; color: inherit; background: transparent; box-shadow: none; text-decoration: none; font: inherit; backdrop-filter: none; }
+.site-nav .site-return:hover { color: var(--site-accent, #2563eb); background: transparent; }
+.site-nav svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.site-nav .site-name { padding-left: 16px; border-left: 1px solid var(--site-line, #e4e7eb); font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+:focus-visible { outline: 3px solid var(--site-accent, #2563eb); outline-offset: 3px; }
+@media (max-width: 600px) { .site-nav { padding: 0 16px; gap: 12px; } .site-nav .site-name { padding-left: 12px; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; } }

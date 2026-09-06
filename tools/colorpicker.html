@@ -13,14 +13,18 @@
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>网页颜色选择器 Color Picker / wangluodaohang</title>
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="../assets/site.css">
     <style>
+        * { box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f4f4f9;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 40px;
+            margin: 0;
+            padding: 88px 24px 40px;
         }
 
         h2 { color: #333; margin-bottom: 30px; }
@@ -29,18 +33,18 @@
         .color-grid {
             display: grid;
             /* 关键：每行固定6个 */
-            grid-template-columns: repeat(6, 1fr);
+            grid-template-columns: repeat(6, minmax(0, 1fr));
             gap: 15px;
-            max-width: 800px;
+            width: min(100%, 720px);
             background: white;
             padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
         }
 
         /* 单个色块 */
         .color-card {
-            width: 80px;
+            width: 100%;
             height: 60px;
             border-radius: 6px;
             cursor: pointer;
@@ -74,7 +78,7 @@
             white-space: nowrap;
         }
 
-        .color-card:hover::after {
+        .color-card:hover::after, .color-card:focus-visible::after {
             opacity: 1;
         }
 
@@ -103,14 +107,20 @@
 
         @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
         @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+        @media (max-width: 600px) {
+            body { padding: 80px 16px 32px; }
+            h2 { font-size: 22px; margin-top: 12px; }
+            .color-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); padding: 14px; gap: 10px; }
+            .color-card { height: 54px; }
+        }
     </style>
 </head>
 <body>
-    <a class="site-return" href="../index.html">← 拾用</a>
+    <nav class="site-nav" aria-label="站点导航"><a class="site-return" href="../index.html"><svg aria-hidden="true"><use href="../assets/icons.svg#arrow-left"></use></svg>拾用</a><span class="site-name">Color Picker</span></nav>
 
     <h2>网页颜色选择器</h2>
     <div class="color-grid" id="colorGrid"></div>
-    <div id="toast">复制成功！</div>
+    <div id="toast" role="status" aria-live="polite">复制成功！</div>
 
     <script>
         // 自动生成120+常用颜色（包含MD色彩、基础色等）
@@ -149,7 +159,9 @@
 
         // 渲染色块
         finalColors.forEach(color => {
-            const card = document.createElement('div');
+            const card = document.createElement('button');
+            card.type = 'button';
+            card.setAttribute('aria-label', `复制颜色 ${color}`);
             card.className = 'color-card';
             card.style.backgroundColor = color;
             card.setAttribute('data-color', color);
@@ -159,6 +171,10 @@
                     toast.innerText = `已复制: ${color}`;
                     toast.className = "show";
                     setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 2500);
+                }).catch(() => {
+                    toast.innerText = '复制失败，请重试';
+                    toast.className = 'show';
+                    setTimeout(() => { toast.className = ''; }, 2500);
                 });
             };
             
